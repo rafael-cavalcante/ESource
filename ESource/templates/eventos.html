@@ -123,13 +123,12 @@
                         <tr>
                             <td>{{ evento.nome }}</td>
                             <td>{{ evento.sigla }}</td>
-                            <td>{{ evento.data }}
-                            </td>
+                            <td>{{ evento.data }}</td>
                             <td>
                                 <div class="btn-group" role="group">
-                                    <a class="btn btn-sm btn-outline-primary"
-                                        href="{{ evento.link }}"
-                                        target="_blank">Visualizar</a>
+                                    <a class="btn btn-sm btn-outline-primary" href="{{ evento.link }}" target="_blank">Visualizar</a>
+                                    <a class="btn btn-sm btn-outline-warning" href="{% url 'ESource:atualizarEvento' evento.id %}">Editar</a>
+                                    <a class="btn btn-sm btn-outline-danger" href="{% url 'ESource:deletarEvento' evento.id %}">Excluir</a>
                                 </div>
                             </td>
                         </tr>

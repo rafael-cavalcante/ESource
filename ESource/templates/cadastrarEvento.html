@@ -64,29 +64,32 @@
     <div class="container">
         <div class="form-container">
             <h2 class="mb-4">Cadastro de Evento</h2>
-            <form>
-                <div class="mb-3">
-                    <label for="nome" class="form-label">Nome do Evento</label>
-                    <input type="text" class="form-control" id="nome" required>
-                </div>
+            <form method="post" action="">
+    {% csrf_token %}
 
-                <div class="mb-3">
-                    <label for="sigla" class="form-label">Sigla</label>
-                    <input type="text" class="form-control" id="sigla" placeholder="Ex: SECOMP, ENECTI" required>
-                </div>
+    <div class="mb-3">
+        <label for="nome" class="form-label">Nome do Evento</label>
+        <input type="text" class="form-control" id="nome" name="nome" value="{{ evento.nome|default:'' }}" required>
+    </div>
 
-                <div class="mb-3">
-                    <label for="ano" class="form-label">Ano</label>
-                    <input type="number" class="form-control" id="ano" min="2000" max="2100" required>
-                </div>
+    <div class="mb-3">
+        <label for="sigla" class="form-label">Sigla</label>
+        <input type="text" class="form-control" id="sigla" name="sigla" placeholder="Ex: SECOMP, ENECTI" value="{{ evento.sigla|default:'' }}" required>
+    </div>
 
-                <div class="mb-3">
-                    <label for="link" class="form-label">Link do Evento</label>
-                    <input type="url" class="form-control" id="link" placeholder="https://exemplo.com" required>
-                </div>
+    <div class="mb-3">
+        <label for="data" class="form-label">Ano</label>
+        <input type="date" class="form-control" id="data" name="data" value="{{ evento.data|date:'Y-m-d' }}" required>
+    </div>
 
-                <button type="submit" class="btn btn-outline-primary">Cadastrar Evento</button>
-            </form>
+    <div class="mb-3">
+        <label for="link" class="form-label">Link do Evento</label>
+        <input type="url" class="form-control" id="link" name="link" placeholder="https://exemplo.com" value="{{ evento.link|default:'' }}" required>
+    </div>
+
+    <button type="submit" class="btn btn-outline-primary">Cadastrar Evento</button>
+</form>
+
         </div>
     </div>
 
