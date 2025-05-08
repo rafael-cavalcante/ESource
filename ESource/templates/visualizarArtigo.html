@@ -73,10 +73,10 @@
 
             <hr>
 
-            <div>
-                <p class="label-bold">Conteúdo:</p>
-                <div class="border rounded p-3 bg-light">
-                    {{ artigo.conteudo }}
+            <div class="mb-3">
+                <label class="form-label">Conteúdo do Artigo</label>
+                <div class="form-control" style="min-height: 300px;">
+                    {{ artigo.conteudo|safe }}
                 </div>
             </div>
         </div>
