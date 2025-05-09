@@ -46,8 +46,7 @@ def eventos(request):
 
     return render(request, 'eventos.html', context)
 
-def artigo(request):
-    artigoId = request.GET.get('id')
+def visualizarArtigo(request, artigoId):
     artigo = get_object_or_404(Artigo, id=artigoId)
     context = {'artigo' : artigo}
 
@@ -87,12 +86,56 @@ def cadastrarArtigo(request):
             evento=evento
         )
 
-        return redirect('ESource:index')
+        return redirect('ESource:home')
 
     eventos = Evento.objects.all()
     context = {'eventos' : eventos}
 
     return render(request, 'cadastrarArtigo.html', context)
+
+@login_required
+def atualizarArtigo(request, artigoId):
+    artigo = get_object_or_404(Artigo, id=artigoId)
+
+    if request.method == "POST":
+        artigo.titulo = request.POST.get('titulo')
+        artigo.autor = request.POST.get('autor')
+        artigo.subAreas = request.POST.get('subAreas')
+        data = request.POST.get('dataPublicacao')
+        artigo.link = request.POST.get('link')
+        artigo.conteudo = request.POST.get('conteudo')
+
+        # Converte a data
+        try:
+            data_publicacao = datetime.strptime(data, "%Y-%m-%d").date()
+        except ValueError:
+            data_publicacao = None
+
+        # Lida com a imagem (salvando só o nome ou caminho, simplificado)
+        imagem_file = request.FILES.get('imagem')
+        imagem_path = imagem_file.name if imagem_file else artigo.imagem
+
+        artigo.dataPublicacao = data_publicacao
+        artigo.imagem = imagem_path
+
+        evento_id = request.POST.get('evento')
+        evento = Evento.objects.get(id=evento_id) if evento_id else None
+        artigo.evento = evento
+
+        artigo.save()
+
+        return redirect('ESource:home')
+
+    eventos = Evento.objects.all()
+    context = {'artigo' : artigo, 'eventos' : eventos}
+
+    return render(request, 'cadastrarArtigo.html', context)
+
+def deletarArtigo(request, artigoId):
+    artigo = get_object_or_404(Artigo, id=artigoId)
+    artigo.delete()
+
+    return redirect('ESource:home')
 
 @login_required
 def cadastrarEvento(request):

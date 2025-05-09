@@ -23,81 +23,45 @@
 </head>
 
 <body>
-<nav class="navbar navbar-expand-lg bg-body-tertiary">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="index-admin.html">ESource</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="dashboard.html">Dashboard</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="chatIA.html">Chat IA</a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                       aria-expanded="false">
-                        Artigo
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="cadastrarArtigo.html">Cadastrar</a></li>
-                    </ul>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                       aria-expanded="false">
-                        Evento
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="cadastrarEvento.html">Cadastrar</a></li>
-                    </ul>
-                </li>
-            </ul>
+    {% include 'fragments/navbar.html'%}
+
+    <div class="container">
+        <div class="form-container">
+            <h2 class="mb-4">Cadastro de Evento</h2>
+            <form method="post" action="">
+                {% csrf_token %}
+
+                <div class="mb-3">
+                    <label for="nome" class="form-label">Nome do Evento</label>
+                    <input type="text" class="form-control" id="nome" name="nome" value="{{ evento.nome|default:'' }}"
+                        required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="sigla" class="form-label">Sigla</label>
+                    <input type="text" class="form-control" id="sigla" name="sigla" placeholder="Ex: SECOMP, ENECTI"
+                        value="{{ evento.sigla|default:'' }}" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="data" class="form-label">Ano</label>
+                    <input type="date" class="form-control" id="data" name="data" value="{{ evento.data|date:'Y-m-d' }}"
+                        required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="link" class="form-label">Link do Evento</label>
+                    <input type="url" class="form-control" id="link" name="link" placeholder="https://exemplo.com"
+                        value="{{ evento.link|default:'' }}" required>
+                </div>
+
+                <button type="submit" class="btn btn-outline-primary">Cadastrar Evento</button>
+            </form>
+
         </div>
     </div>
-</nav>
 
-<div class="container">
-    <div class="form-container">
-        <h2 class="mb-4">Cadastro de Evento</h2>
-        <form method="post" action="">
-            {% csrf_token %}
-
-            <div class="mb-3">
-                <label for="nome" class="form-label">Nome do Evento</label>
-                <input type="text" class="form-control" id="nome" name="nome" value="{{ evento.nome|default:'' }}"
-                       required>
-            </div>
-
-            <div class="mb-3">
-                <label for="sigla" class="form-label">Sigla</label>
-                <input type="text" class="form-control" id="sigla" name="sigla" placeholder="Ex: SECOMP, ENECTI"
-                       value="{{ evento.sigla|default:'' }}" required>
-            </div>
-
-            <div class="mb-3">
-                <label for="data" class="form-label">Ano</label>
-                <input type="date" class="form-control" id="data" name="data" value="{{ evento.data|date:'Y-m-d' }}"
-                       required>
-            </div>
-
-            <div class="mb-3">
-                <label for="link" class="form-label">Link do Evento</label>
-                <input type="url" class="form-control" id="link" name="link" placeholder="https://exemplo.com"
-                       value="{{ evento.link|default:'' }}" required>
-            </div>
-
-            <button type="submit" class="btn btn-outline-primary">Cadastrar Evento</button>
-        </form>
-
-    </div>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

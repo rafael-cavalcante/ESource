@@ -26,67 +26,45 @@
 </head>
 
 <body>
-<nav class="navbar navbar-expand-lg bg-body-tertiary">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="index.html">ESource</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="dashboard.html">Dashboard</a>
-                </li>
-            </ul>
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="chatIA.html">Chat IA</a>
-                </li>
-            </ul>
-        </div>
-        <a class="nav-link" href="entrar.html">Entrar</a>
-    </div>
-</nav>
+    {% include 'fragments/navbar.html'%}
 
-<div class="container mb-4">
-    <div class="card">
-        <img src="{{ artigo.imagem|default:'/static/img/banner.jpg' }}"
-             class="card-img-top" alt="...">
-        <div class="card-header">
-            <h4 class="mb-0">{{ artigo.titulo }}</h4>
-        </div>
-        <div class="card-body">
-            <p><span class="label-bold">Autores:</span> {{ artigo.autor }}</p>
+    <div class="container mb-4">
+        <div class="card">
+            <img src="{{ artigo.imagem|default:'/static/img/banner.jpg' }}" class="card-img-top" alt="...">
+            <div class="card-header">
+                <h4 class="mb-0">{{ artigo.titulo }}</h4>
+            </div>
+            <div class="card-body">
+                <p><span class="label-bold">Autores:</span> {{ artigo.autor }}</p>
 
-            <p><span class="label-bold">Data:</span> {{ artigo.dataPublicacao }}</p>
+                <p><span class="label-bold">Data:</span> {{ artigo.dataPublicacao }}</p>
 
-            <p><span class="label-bold">Subárea:</span> {{ artigo.subAreas }}</p>
+                <p><span class="label-bold">Subárea:</span> {{ artigo.subAreas }}</p>
 
-            <p><span class="label-bold">Evento:</span> {{ artigo.evento }}</p>
+                <p><span class="label-bold">Evento:</span> {{ artigo.evento }}</p>
 
-            <p><span class="label-bold">Link:</span>
-                <a href="{{ artigo.link }}" target="_blank">
-                    {{ artigo.link }}
-                </a>
-            </p>
+                <p><span class="label-bold">Link:</span>
+                    <a href="{{ artigo.link }}" target="_blank">
+                        {{ artigo.link }}
+                    </a>
+                </p>
 
-            <hr>
+                <hr>
 
-            <div class="mb-3">
-                <label class="form-label">Conteúdo do Artigo</label>
-                <div class="form-control" style="min-height: 300px;">
-                    {{ artigo.conteudo|safe }}
+                <div class="mb-3">
+                    <label class="form-label">Conteúdo do Artigo</label>
+                    <div class="form-control" style="min-height: 300px;">
+                        {{ artigo.conteudo|safe }}
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="card-footer text-end">
-            <a href="javascript:history.back()" class="btn btn-secondary">Voltar</a>
+            <div class="card-footer text-end">
+                <a href="javascript:history.back()" class="btn btn-secondary">Voltar</a>
+            </div>
         </div>
     </div>
-</div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
