@@ -8,8 +8,6 @@ class Evento(models.Model):
     data = models.DateField(blank=True, null=True)
     link = models.TextField(blank=True, null=True)
 
-    objects = models.Manager()
-
     def __str__(self):
         return self.nome
 
@@ -23,8 +21,6 @@ class Artigo(models.Model):
     conteudo = models.TextField(blank=True, null=True)
 
     evento = models.ForeignKey(Evento, on_delete=models.CASCADE, related_name='artigos', blank=True, null=True)
-
-    objects = models.Manager()
 
     def __str__(self):
         return self.titulo

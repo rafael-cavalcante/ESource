@@ -1,14 +1,16 @@
 from . import views
-from django.urls import path
+from django.urls import path, include
 
 app_name = "ESource"
 
 urlpatterns = [
-    path('', views.index, name='index'),
+    path('', views.home, name='home'),
     path('eventos', views.eventos, name='eventos'),
     path('artigo', views.artigo, name='artigo'),
     path('cadastrarEvento', views.cadastrarEvento, name='cadastrarEvento'),
     path('atualizarEvento/<int:eventoId>/', views.atualizarEvento, name='atualizarEvento'),
     path('deletarEvento/<int:eventoId>/', views.deletarEvento, name='deletarEvento'),
-    path('cadastrarArtigo', views.cadastrarArtigo,name='cadastrarArtigo'),
+    path('cadastrarArtigo', views.cadastrarArtigo, name='cadastrarArtigo'),
+    path('entrar', views.entrar, name='entrar'),
+    path('sair', views.sair, name='sair')
 ]

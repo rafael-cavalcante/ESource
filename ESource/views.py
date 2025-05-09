@@ -1,16 +1,42 @@
 from datetime import datetime
+from django.contrib.auth import login, authenticate, logout
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Evento, Artigo
 
 # Create your views here.
 
-def index(request):
+def home(request):
     artigos = Artigo.objects.all()
     totalArtigos = Artigo.objects.count()
     totalEventos = Evento.objects.count()
     context = {'artigos' : artigos, 'totalArtigos' : totalArtigos, 'totalEventos' : totalEventos}
 
-    return render(request, 'index.html', context)
+    return render(request, 'home.html', context)
+
+def entrar(request):
+    if request.method == 'POST':
+        username = request.POST.get('username', '').strip()
+        password = request.POST.get('password', '').strip()
+
+        if not username or not password:
+            messages.error(request, 'Por favor preencha username e password!')
+            return render(request, 'conta/entrar.html')
+
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            return  redirect('ESource:home')
+        else:
+            messages.error(request, 'Usuario não existe!')
+
+    return render(request, 'conta/entrar.html')
+
+def sair(request):
+    logout(request)
+    return redirect('ESource:home')
 
 def eventos(request):
     eventos = Evento.objects.all()
@@ -27,6 +53,7 @@ def artigo(request):
 
     return render(request, 'visualizarArtigo.html', context)
 
+@login_required
 def cadastrarArtigo(request):
     if request.method == "POST":
         titulo = request.POST.get('titulo')
@@ -67,6 +94,7 @@ def cadastrarArtigo(request):
 
     return render(request, 'cadastrarArtigo.html', context)
 
+@login_required
 def cadastrarEvento(request):
     if request.method == "POST":
         nome = request.POST.get('nome')
@@ -90,6 +118,7 @@ def cadastrarEvento(request):
 
     return render(request, 'cadastrarEvento.html')
 
+@login_required
 def atualizarEvento(request, eventoId):
     evento = get_object_or_404(Evento, id=eventoId)
 
@@ -114,6 +143,7 @@ def atualizarEvento(request, eventoId):
 
     return render(request, 'cadastrarEvento.html', context)
 
+@login_required
 def deletarEvento(request, eventoId):
     evento = get_object_or_404(Evento, id=eventoId)
     evento.delete()
