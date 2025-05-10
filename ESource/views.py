@@ -3,51 +3,40 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Evento, Artigo, Status
+from .models import Evento, Artigo, Status, Autor
 
 # Create your views here.
-def home(request):
-    artigos = Artigo.objects.all()
-    totalArtigos = Artigo.objects.count()
-    totalEventos = Evento.objects.count()
-    statusEvento = Status.objects.filter(modelo='Evento').latest('atualizado')
-    statusArtigo = Status.objects.filter(modelo='Artigo').latest('atualizado')
-    context = {'artigos' : artigos, 'totalArtigos' : totalArtigos, 'totalEventos' : totalEventos, 'statusEvento' : statusEvento, 'statusArtigo' : statusArtigo}
+def get_context_data(extra_context=None):
+    context = {
+        'totalArtigos': Artigo.objects.count(),
+        'totalEventos': Evento.objects.count(),
+        'totalAutores': Autor.objects.count(),
+        'statusEvento': Status.objects.filter(modelo='Evento').order_by('-atualizado').first(),
+        'statusArtigo': Status.objects.filter(modelo='Artigo').order_by('-atualizado').first(),
+        'statusAutor': Status.objects.filter(modelo='Autor').order_by('-atualizado').first(),
+    }
+    if extra_context:
+        context.update(extra_context)
+    return context
 
+def home(request):
+    artigos = Artigo.objects.filter(status='DISP')
+    context = get_context_data({'artigos': artigos})
+    
     return render(request, 'home.html', context)
 
-def entrar(request):
-    if request.method == 'POST':
-        username = request.POST.get('username', '').strip()
-        password = request.POST.get('password', '').strip()
-
-        if not username or not password:
-            messages.error(request, 'Por favor preencha username e password!')
-            return render(request, 'conta/entrar.html')
-
-        user = authenticate(request, username=username, password=password)
-
-        if user is not None:
-            login(request, user)
-            return  redirect('ESource:home')
-        else:
-            messages.error(request, 'Usuario não existe!')
-
-    return render(request, 'conta/entrar.html')
-
-def sair(request):
-    logout(request)
-    return redirect('ESource:home')
-
 def eventos(request):
-    eventos = Evento.objects.all()
-    totalArtigos = Artigo.objects.count()
-    totalEventos = Evento.objects.count()
-    statusEvento = Status.objects.filter(modelo='Evento').latest('atualizado')
-    statusArtigo = Status.objects.filter(modelo='Artigo').latest('atualizado')
-    context = {'eventos' : eventos, 'totalArtigos' : totalArtigos, 'totalEventos' : totalEventos, 'statusEvento' : statusEvento, 'statusArtigo' : statusArtigo}
+    eventos = Evento.objects.filter(status='DISP')
+    context = get_context_data({'eventos': eventos})
 
     return render(request, 'eventos.html', context)
+
+@login_required
+def autores(request):
+    autores = Autor.objects.all()
+    context = get_context_data({'autores': autores})
+    
+    return render(request, 'autores.html', context)
 
 def visualizarArtigo(request, artigoId):
     artigo = get_object_or_404(Artigo, id=artigoId)
@@ -65,16 +54,12 @@ def cadastrarArtigo(request):
         link = request.POST.get('link')
         conteudo = request.POST.get('conteudo')
         evento_id = request.POST.get('evento')
-        imagem_file = request.FILES.get('imagem')
 
         # Converte a data
         try:
             data_publicacao = datetime.strptime(data, "%Y-%m-%d").date()
         except ValueError:
             data_publicacao = None
-
-        # Lida com a imagem (salvando só o nome ou caminho, simplificado)
-        imagem_path = imagem_file.name if imagem_file else ''
 
         evento = Evento.objects.get(id=evento_id) if evento_id else None
 
@@ -84,7 +69,6 @@ def cadastrarArtigo(request):
             subAreas=subAreas,
             dataPublicacao=data_publicacao,
             link=link,
-            imagem=imagem_path,
             conteudo=conteudo,
             evento=evento
         )
@@ -92,7 +76,8 @@ def cadastrarArtigo(request):
         return redirect('ESource:home')
 
     eventos = Evento.objects.all()
-    context = {'eventos' : eventos}
+    autores = Autor.objects.all()
+    context = {'eventos' : eventos, 'autores' : autores}
 
     return render(request, 'cadastrarArtigo.html', context)
 
@@ -114,23 +99,22 @@ def atualizarArtigo(request, artigoId):
         except ValueError:
             data_publicacao = None
 
-        # Lida com a imagem (salvando só o nome ou caminho, simplificado)
-        imagem_file = request.FILES.get('imagem')
-        imagem_path = imagem_file.name if imagem_file else artigo.imagem
-
         artigo.dataPublicacao = data_publicacao
-        artigo.imagem = imagem_path
 
         evento_id = request.POST.get('evento')
         evento = Evento.objects.get(id=evento_id) if evento_id else None
         artigo.evento = evento
+        
+        autores_ids = request.POST.getlist("autores")
+        artigo.autores.set(autores_ids)
 
         artigo.save()
 
         return redirect('ESource:home')
 
     eventos = Evento.objects.all()
-    context = {'artigo' : artigo, 'eventos' : eventos}
+    autores = Autor.objects.all()
+    context = {'artigo' : artigo, 'eventos' : eventos, 'autores' : autores}
 
     return render(request, 'cadastrarArtigo.html', context)
 
@@ -195,3 +179,42 @@ def deletarEvento(request, eventoId):
     evento.delete()
 
     return redirect('ESource:eventos')
+
+@login_required
+def cadastrarAutor(request):
+    if request.method == "POST":
+        nome = request.POST.get('nome')
+        citacao = request.POST.get('citacao')
+
+        Autor.objects.create(
+            nome=nome,
+            citacao=citacao
+        )
+
+        return redirect('ESource:home')
+
+    return render(request, 'cadastrarAutor.html')
+
+# Login and Logout views
+def entrar(request):
+    if request.method == 'POST':
+        username = request.POST.get('username', '').strip()
+        password = request.POST.get('password', '').strip()
+
+        if not username or not password:
+            messages.error(request, 'Por favor preencha username e password!')
+            return render(request, 'conta/entrar.html')
+
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            return  redirect('ESource:home')
+        else:
+            messages.error(request, 'Usuario não existe!')
+
+    return render(request, 'conta/entrar.html')
+
+def sair(request):
+    logout(request)
+    return redirect('ESource:home')
