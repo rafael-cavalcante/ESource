@@ -43,7 +43,9 @@ def eventos(request):
     eventos = Evento.objects.all()
     totalArtigos = Artigo.objects.count()
     totalEventos = Evento.objects.count()
-    context = {'eventos' : eventos, 'totalArtigos' : totalArtigos, 'totalEventos' : totalEventos}
+    statusEvento = Status.objects.filter(modelo='Evento').latest('atualizado')
+    statusArtigo = Status.objects.filter(modelo='Artigo').latest('atualizado')
+    context = {'eventos' : eventos, 'totalArtigos' : totalArtigos, 'totalEventos' : totalEventos, 'statusEvento' : statusEvento, 'statusArtigo' : statusArtigo}
 
     return render(request, 'eventos.html', context)
 

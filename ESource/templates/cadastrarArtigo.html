@@ -28,7 +28,7 @@
 <body>
     {% include 'fragments/navbar.html'%}
 
-    <div class="container">
+    <div class="container mt-5 pt-4 mb-5 pb-4">
         <div class="form-container">
             <h2 class="mb-4">Cadastro de Artigo</h2>
             <form method="post" enctype="multipart/form-data">
@@ -57,7 +57,7 @@
                     <select class="form-select" id="evento" name="evento">
                         <option value="">Selecione um evento</option>
                         {% for ev in eventos %}
-                        <option value="{{ ev.id }}" {% if ev.id == artigo.evento.id %} selected {% endif %}>
+                        <option value="{{ ev.id }}" {% if ev == artigo.evento %} selected {% endif %}>
                             {{ ev.nome }}
                         </option>
                         {% endfor %}
@@ -83,7 +83,8 @@
 
                 <div class="mb-3">
                     <label for="summernote" class="form-label">Conteúdo do Artigo</label>
-                    <textarea id="summernote" name="conteudo" class="form-control" rows="6">{{ artigo.conteudo|default:'' }}</textarea>
+                    <textarea id="summernote" name="conteudo" class="form-control"
+                        rows="6">{{ artigo.conteudo|default:'' }}</textarea>
                 </div>
 
                 <button type="submit" class="btn btn-outline-primary">Cadastrar Artigo</button>
@@ -91,6 +92,8 @@
 
         </div>
     </div>
+
+    {% include 'fragments/footer.html' %}
 
     <!-- include libraries(jQuery, bootstrap) -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

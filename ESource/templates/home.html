@@ -6,6 +6,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ESource</title>
+    <link rel="icon" type="image/x-icon" href="{% static 'img/favicon.ico' %}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous" />
     <link href="https://cdn.datatables.net/2.2.2/css/dataTables.bootstrap5.css" rel="stylesheet" />
@@ -19,6 +20,7 @@
         <div class="text-center">
             <h1>Bem-vindo ao ESource</h1>
             <p>Seu portal para eventos e artigos científicos voltados para Engenharia de Software(ES).</p>
+        </div>
 
         {% include 'fragments/cards.html' %}
 
@@ -41,7 +43,7 @@
                             <th>Nome</th>
                             <th>Autores</th>
                             <th>Data</th>
-                            <th>Sub àreas</th>
+                            <th>Subáreas</th>
                             <th>Opções</th>
                         </tr>
                     </thead>
@@ -55,7 +57,6 @@
                             </td>
                             <td>{{ artigo.subAreas }}</td>
                             <td>
-
                                 {% if request.user.is_authenticated %}
                                 <div class="btn-group" role="group">
                                     <a class="btn btn-sm btn-outline-primary"
@@ -78,8 +79,8 @@
                         <tr>
                             <th>Nome</th>
                             <th>Autores</th>
-                            <th>Ano</th>
-                            <th>Sub àreas</th>
+                            <th>Data</th>
+                            <th>Subáreas</th>
                             <th>Opções</th>
                         </tr>
                     </tfoot>
@@ -119,23 +120,7 @@
     <script src="https://cdn.datatables.net/2.2.2/js/dataTables.js"></script>
     <script src="https://cdn.datatables.net/2.2.2/js/dataTables.bootstrap5.js"></script>
     <script src="{% static 'js/script.js' %}"></script>
-    <script>
-        const confirmDeleteModal = document.getElementById('confirmDeleteModal');
-        confirmDeleteModal.addEventListener('show.bs.modal', function (event) {
-            const button = event.relatedTarget;
-            const itemId = button.getAttribute('data-item-id');
-            const itemName = button.getAttribute('data-item-name');
-            const itemUrl = button.getAttribute('data-item-url');
-
-            // Atualizar o texto dentro do modal
-            const itemNameSpan = confirmDeleteModal.querySelector('#itemNameInModal');
-            itemNameSpan.textContent = itemName;
-
-            // Atualizar a action do formulário
-            const form = confirmDeleteModal.querySelector('#deleteForm');
-            form.action = `/${itemUrl}/${itemId}/`;
-        });
-    </script>
+    <script src="{% static 'js/modalExclusao.js'%}"></script>    
 </body>
 
 </html>

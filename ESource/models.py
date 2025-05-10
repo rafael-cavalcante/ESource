@@ -36,4 +36,5 @@ class Status(models.Model):
         verbose_name_plural = "Status"
 
     def __str__(self):
-        return f"{self.modelo} #{self.objetoId} - {self.atualizado}"
+        atualizadoFormatada = self.atualizado.strftime('%d/%m/%Y %H:%M') if self.atualizado else 'Sem data'
+        return f"{self.modelo} #{self.objetoId} - {atualizadoFormatada}"
