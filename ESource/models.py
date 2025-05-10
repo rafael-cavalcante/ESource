@@ -25,3 +25,15 @@ class Artigo(models.Model):
     def __str__(self):
         return self.titulo
 
+class Status(models.Model):
+    modelo = models.CharField(max_length=100)  # Ex: 'Artigo', 'Evento'
+    objetoId = models.PositiveIntegerField()   # ID do objeto modificado
+    atualizado = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ('modelo', 'objetoId')
+        verbose_name = "Status"
+        verbose_name_plural = "Status"
+
+    def __str__(self):
+        return f"{self.modelo} #{self.objetoId} - {self.atualizado}"

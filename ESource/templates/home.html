@@ -15,7 +15,10 @@
 
     {% include 'fragments/navbar.html'%}
 
-    <div class="container mt-5 mb-5">
+    <div class="container mt-5 pt-4 mb-5 pb-4">
+        <div class="text-center">
+            <h1>Bem-vindo ao ESource</h1>
+            <p>Seu portal para eventos e artigos científicos voltados para Engenharia de Software(ES).</p>
 
         {% include 'fragments/cards.html' %}
 
@@ -65,7 +68,7 @@
                                 </div>
                                 {% else %}
                                 <a class="btn btn-sm btn-outline-primary"
-                                    href="{% url 'ESource:artigo' %}?id={{ artigo.id }}">Visualizar</a>
+                                    href="{% url 'ESource:visualizarArtigo' artigo.id %}">Visualizar</a>
                                 {% endif %}
                             </td>
                         </tr>
@@ -84,6 +87,8 @@
             </div>
         </div>
     </div>
+
+    {% include 'fragments/footer.html' %}
 
     <!-- Modal de Confirmação -->
     <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-hidden="true">

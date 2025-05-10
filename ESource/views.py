@@ -3,15 +3,16 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Evento, Artigo
+from .models import Evento, Artigo, Status
 
 # Create your views here.
-
 def home(request):
     artigos = Artigo.objects.all()
     totalArtigos = Artigo.objects.count()
     totalEventos = Evento.objects.count()
-    context = {'artigos' : artigos, 'totalArtigos' : totalArtigos, 'totalEventos' : totalEventos}
+    statusEvento = Status.objects.filter(modelo='Evento').latest('atualizado')
+    statusArtigo = Status.objects.filter(modelo='Artigo').latest('atualizado')
+    context = {'artigos' : artigos, 'totalArtigos' : totalArtigos, 'totalEventos' : totalEventos, 'statusEvento' : statusEvento, 'statusArtigo' : statusArtigo}
 
     return render(request, 'home.html', context)
 
