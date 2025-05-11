@@ -126,8 +126,9 @@ def deletarArtigo(request, artigoId):
 
     return redirect('ESource:home')
 
+#Modulo de Arquivamento Artigos
 @login_required
-def arquivarArtigo(request, artigoId):
+def arquivar_artigo(request, artigoId):
     artigo = get_object_or_404(Artigo, id=artigoId)
     artigo.status = 'ARQ'
     artigo.save()
@@ -137,14 +138,47 @@ def arquivarArtigo(request, artigoId):
     return redirect('ESource:home')
 
 @login_required
-def desarquivarArtigo(request, artigoId):
+def desarquivar_artigo(request, artigoId):
     artigo = get_object_or_404(Artigo, id=artigoId)
     artigo.status = 'DISP'
     artigo.save()
 
     messages.success(request, f'Artigo {artigo.titulo} Desarquivado com Sucesso!')
 
-    return redirect('ESource:home')
+    return redirect('ESource:listar_artigos_arquivados')
+
+@login_required
+def listar_artigos_arquivados(request):
+    artigos_arquivados = Artigo.objects.filter(status='ARQ')
+        
+    return render(request, 'artigo/listar_artigos_arquivados.html', {'artigos_arquivados': artigos_arquivados})
+
+#Modulo de Arquivamento Eventos
+@login_required
+def arquivar_evento(request, eventoId):
+    evento = get_object_or_404(Evento, id=eventoId)
+    evento.status = 'ARQ'
+    evento.save()
+
+    messages.success(request, f'Evento {evento.nome} Arquivado com Sucesso!')
+
+    return redirect('ESource:eventos')
+
+@login_required
+def desarquivar_evento(request, eventoId):
+    evento = get_object_or_404(Evento, id=eventoId)
+    evento.status = 'DISP'
+    evento.save()
+
+    messages.success(request, f'Evento {evento.nome} Desarquivado com Sucesso!')
+
+    return redirect('ESource:listar_eventos_arquivados')
+
+@login_required
+def listar_eventos_arquivados(request):
+    eventos_arquivados = Evento.objects.filter(status='ARQ')
+        
+    return render(request, 'evento/listar_eventos_arquivados.html', {'eventos_arquivados': eventos_arquivados})
 
 @login_required
 def cadastrarEvento(request):
@@ -199,6 +233,8 @@ def atualizarEvento(request, eventoId):
 def deletarEvento(request, eventoId):
     evento = get_object_or_404(Evento, id=eventoId)
     evento.delete()
+    
+    messages.success(request, f'Evento {evento.nome} Deletado com Sucesso!')
 
     return redirect('ESource:eventos')
 

@@ -24,6 +24,17 @@
 
         {% include 'fragments/cards.html' %}
 
+        <div class="container">
+            {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
+            </div>
+            {% endfor %}
+            {% endif %}
+        </div>
+
         <div class="card text-center mt-5">
             <div class="card-header">
                 <ul class="nav nav-tabs card-header-tabs">
@@ -63,6 +74,10 @@
                                         target="_blank">Visualizar</a>
                                     <a class="btn btn-sm btn-outline-warning"
                                         href="{% url 'ESource:atualizarEvento' evento.id %}">Editar</a>
+                                    <a class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal"
+                                        data-bs-target="#confirmModalArquiva" data-item-id="{{ evento.id }}"
+                                        data-item-url="arquivar_evento" data-item-name="{{ evento.nome }}">
+                                        <i class="bi bi-archive-fill"></i>Arquivar</a>
                                     <a class="btn btn-sm btn-outline-danger" data-bs-toggle="modal"
                                         data-bs-target="#confirmDeleteModal" data-item-id="{{ evento.id }}"
                                         data-item-url="deletarEvento" data-item-name="{{ evento.nome }}">Excluir</a>
@@ -112,6 +127,28 @@
         </div>
     </div>
 
+    <!-- Modal de Confirmação Desarquivar-->
+    <div class="modal fade" id="confirmModalArquiva" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <form method="post" id="arquivaForm">
+                {% csrf_token %}
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Confirmar Arquivar</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Tem certeza de que deseja Arquivar <strong id="itemNameInModal"></strong>?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-danger">Arquivar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq"
         crossorigin="anonymous"></script>
@@ -120,6 +157,7 @@
     <script src="https://cdn.datatables.net/2.2.2/js/dataTables.bootstrap5.js"></script>
     <script src="{% static 'js/script.js' %}"></script>
     <script src="{% static 'js/modalExclusao.js'%}"></script>
+    <script src="{% static 'js/modal_personalizado.js'%}"></script>
 </body>
 
 </html>

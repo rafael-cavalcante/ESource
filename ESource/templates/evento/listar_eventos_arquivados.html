@@ -19,13 +19,6 @@
     {% include 'fragments/navbar.html'%}
 
     <div class="container mt-5 pt-4 mb-5 pb-4">
-        <div class="text-center">
-            <h1>Bem-vindo ao ESource</h1>
-            <p>Seu portal para eventos e artigos científicos voltados para Engenharia de Software(ES).</p>
-        </div>
-
-        {% include 'fragments/cards.html' %}
-
         <div class="container">
             {% if messages %}
             {% for message in messages %}
@@ -39,63 +32,36 @@
 
         <div class="card text-center mt-5">
             <div class="card-header">
-                <ul class="nav nav-tabs card-header-tabs">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="true">Artigos</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'ESource:eventos' %}">Eventos</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'ESource:autores' %}">Autores</a>
-                    </li>
-                </ul>
+                <h2 class="card-title">Lista de Eventos Arquivados</h2>
             </div>
             <div class="card-body">
-                <h5 class="card-title">Lista de Artigos</h5>
                 <table id="example" class="table table-striped" style="width:100%">
                     <thead>
                         <tr>
+                            <th>Status</th>
                             <th>Nome</th>
-                            <th>Autores</th>
+                            <th>Sigra</th>
                             <th>Data</th>
-                            <th>Subáreas</th>
                             <th>Opções</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {% for artigo in artigos %}
+                        {% for evento in eventos_arquivados %}
                         <tr>
-                            <td>{{ artigo.titulo }}
-                            </td>
-                            <td>
-                                {% for autor in artigo.autores.all %}
-                                {{ autor.citacao }}{% if not forloop.last %}, {% endif %}
-                                {% empty %}
-                                <em>Sem autores</em>
-                                {% endfor %}
-                            </td>
-                            <td>{{ artigo.dataPublicacao }}
-                            </td>
-                            <td>{{ artigo.subAreas }}</td>
+                            <td><span class="badge text-bg-secondary">{{ evento.get_status_display }}</span></td>
+                            <td>{{ evento.nome }}</td>
+                            <td>{{ evento.sigla }}</td>
+                            <td>{{ evento.data }}</td>
                             <td>
                                 <div class="btn-group" role="group">
-                                    <a class="btn btn-sm btn-outline-primary"
-                                        href="{% url 'ESource:visualizarArtigo' artigo.id %}">
-                                        <i class="bi bi-view-list"></i>Visualizar</a>
-                                    {% if request.user.is_authenticated %}
-                                    <a class="btn btn-sm btn-outline-warning"
-                                        href="{% url 'ESource:atualizarArtigo' artigo.id %}">
-                                        <i class="bi bi-pencil-square"></i>Editar</a>
                                     <a class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal"
-                                        data-bs-target="#confirmModalArquiva" data-item-id="{{ artigo.id }}"
-                                        data-item-url="arquivar_artigo" data-item-name="{{ artigo.titulo }}">
-                                        <i class="bi bi-archive-fill"></i>Arquivar</a>
+                                        data-bs-target="#confirmDesarquivaModal" data-item-id="{{ evento.id }}"
+                                        data-item-url="desarquivar_evento" data-item-name="{{ evento.nome }}">
+                                        <i class="bi bi-archive"></i>desarquivar</a>
                                     <a class="btn btn-sm btn-outline-danger" data-bs-toggle="modal"
-                                        data-bs-target="#confirmDeleteModal" data-item-id="{{ artigo.id }}"
-                                        data-item-url="deletarArtigo" data-item-name="{{ artigo.titulo }}">
+                                        data-bs-target="#confirmDeleteModal" data-item-id="{{ evento.id }}"
+                                        data-item-url="deletarEvento" data-item-name="{{ evento.nome }}">
                                         <i class="bi bi-trash"></i>Excluir</a>
-                                    {% endif %}
                                 </div>
                             </td>
                         </tr>
@@ -103,10 +69,10 @@
                     </tbody>
                     <tfoot>
                         <tr>
+                            <th>Status</th>
                             <th>Nome</th>
-                            <th>Autores</th>
+                            <th>Sigra</th>
                             <th>Data</th>
-                            <th>Subáreas</th>
                             <th>Opções</th>
                         </tr>
                     </tfoot>
@@ -117,7 +83,7 @@
 
     {% include 'fragments/footer.html' %}
 
-    <!-- Modal de Confirmação -->
+    <!-- Modal de Confirmação Exclusão-->
     <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
             <form method="post" id="deleteForm">
@@ -140,21 +106,21 @@
     </div>
 
     <!-- Modal de Confirmação Desarquivar-->
-      <div class="modal fade" id="confirmModalArquiva" tabindex="-1" aria-hidden="true">
+    <div class="modal fade" id="confirmDesarquivaModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
-            <form method="post" id="arquivaForm">
+            <form method="post" id="desarquivaForm">
                 {% csrf_token %}
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Confirmar Arquivar</h5>
+                        <h5 class="modal-title">Confirmar Desarquivar</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
                     </div>
                     <div class="modal-body">
-                        <p>Tem certeza de que deseja Arquivar <strong id="itemNameInModal"></strong>?</p>
+                        <p>Tem certeza de que deseja desarquivar <strong id="itemNameInModal"></strong>?</p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-danger">Arquivar</button>
+                        <button type="submit" class="btn btn-danger">Desarquivar</button>
                     </div>
                 </div>
             </form>
@@ -172,7 +138,7 @@
 
     <script src="{% static 'js/script.js' %}"></script>
     <script src="{% static 'js/modalExclusao.js'%}"></script>
-    <script src="{% static 'js/modal_personalizado.js'%}"></script>
+    <script src="{% static 'js/modalDesarquiva.js'%}"></script>
 </body>
 
 </html>
