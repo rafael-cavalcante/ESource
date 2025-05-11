@@ -5,7 +5,6 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 
 from ESource.models import Evento, Artigo, Autor
-
 from ESource.utils.context import get_context_data
 
 # Create your views here.
