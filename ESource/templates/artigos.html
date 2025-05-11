@@ -26,16 +26,7 @@
 
         {% include 'fragments/cards.html' %}
 
-        <div class="container">
-            {% if messages %}
-            {% for message in messages %}
-            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                {{ message }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
-            </div>
-            {% endfor %}
-            {% endif %}
-        </div>
+        {% include 'fragments/messages.html' %}
 
         <div class="card text-center mt-5">
             <div class="card-header">
@@ -52,7 +43,7 @@
                 </ul>
             </div>
             <div class="card-body">
-                <h5 class="card-title">Lista de Artigos</h5>
+                <h2 class="card-title">Lista de Artigos</h2>
                 <table id="example" class="table table-striped" style="width:100%">
                     <thead>
                         <tr>
@@ -81,20 +72,16 @@
                             <td>
                                 <div class="btn-group" role="group">
                                     <a class="btn btn-sm btn-outline-primary"
-                                        href="{% url 'ESource:visualizarArtigo' artigo.id %}">
+                                        href="{% url 'ESource:exibir_artigo' artigo.id %}">
                                         <i class="bi bi-view-list"></i>Visualizar</a>
                                     {% if request.user.is_authenticated %}
                                     <a class="btn btn-sm btn-outline-warning"
-                                        href="{% url 'ESource:atualizarArtigo' artigo.id %}">
+                                        href="{% url 'ESource:editar_artigo' artigo.id %}">
                                         <i class="bi bi-pencil-square"></i>Editar</a>
                                     <a class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal"
-                                        data-bs-target="#confirmModalArquiva" data-item-id="{{ artigo.id }}"
+                                        data-bs-target="#modal_confirmacao_arquivar" data-item-id="{{ artigo.id }}"
                                         data-item-url="arquivar_artigo" data-item-name="{{ artigo.titulo }}">
                                         <i class="bi bi-archive-fill"></i>Arquivar</a>
-                                    <a class="btn btn-sm btn-outline-danger" data-bs-toggle="modal"
-                                        data-bs-target="#confirmDeleteModal" data-item-id="{{ artigo.id }}"
-                                        data-item-url="deletarArtigo" data-item-name="{{ artigo.titulo }}">
-                                        <i class="bi bi-trash"></i>Excluir</a>
                                     {% endif %}
                                 </div>
                             </td>
@@ -117,32 +104,10 @@
 
     {% include 'fragments/footer.html' %}
 
-    <!-- Modal de Confirmação -->
-    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-hidden="true">
+    <!-- Modal de Confirmação Arquivar-->
+    <div class="modal fade" id="modal_confirmacao_arquivar" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
-            <form method="post" id="deleteForm">
-                {% csrf_token %}
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Confirmar Exclusão</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p>Tem certeza de que deseja excluir <strong id="itemNameInModal"></strong>?</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-danger">Excluir</button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Modal de Confirmação Desarquivar-->
-      <div class="modal fade" id="confirmModalArquiva" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
-            <form method="post" id="arquivaForm">
+            <form method="post" id="form_arquivar">
                 {% csrf_token %}
                 <div class="modal-content">
                     <div class="modal-header">
@@ -150,7 +115,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
                     </div>
                     <div class="modal-body">
-                        <p>Tem certeza de que deseja Arquivar <strong id="itemNameInModal"></strong>?</p>
+                        <p>Tem certeza de que deseja Arquivar: <strong id="item_nome_modal"></strong>?</p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
@@ -170,9 +135,8 @@
     <script src="https://cdn.datatables.net/responsive/3.0.4/js/dataTables.responsive.js"></script>
     <script src="https://cdn.datatables.net/responsive/3.0.4/js/responsive.bootstrap5.js"></script>
 
-    <script src="{% static 'js/script.js' %}"></script>
-    <script src="{% static 'js/modalExclusao.js'%}"></script>
-    <script src="{% static 'js/modal_personalizado.js'%}"></script>
+    <script src="{% static 'js/datatable.js' %}"></script>
+    <script src="{% static 'js/modal_arquiva.js'%}"></script>
 </body>
 
 </html>

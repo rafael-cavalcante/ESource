@@ -1,4 +1,4 @@
-from datetime import datetime
+'''from datetime import datetime
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -19,11 +19,12 @@ def get_context_data(extra_context=None):
         context.update(extra_context)
     return context
 
-def home(request):
+# Artigo views
+def artigos(request):
     artigos = Artigo.objects.filter(status='DISP')
     context = get_context_data({'artigos': artigos})
     
-    return render(request, 'home.html', context)
+    return render(request, 'artigos.html', context)
 
 def eventos(request):
     eventos = Evento.objects.filter(status='DISP')
@@ -135,7 +136,7 @@ def arquivar_artigo(request, artigoId):
 
     messages.success(request, f'Artigo {artigo.titulo} Arquivado com Sucesso!')
 
-    return redirect('ESource:home')
+    return redirect('ESource:artigos')
 
 @login_required
 def desarquivar_artigo(request, artigoId):
@@ -307,3 +308,5 @@ def entrar(request):
 def sair(request):
     logout(request)
     return redirect('ESource:home')
+    
+'''
