@@ -8,8 +8,8 @@ from .models import Evento, Artigo, Status, Autor
 # Create your views here.
 def get_context_data(extra_context=None):
     context = {
-        'totalArtigos': Artigo.objects.count(),
-        'totalEventos': Evento.objects.count(),
+        'totalArtigos': Artigo.objects.filter(status='DISP').count,
+        'totalEventos': Evento.objects.filter(status='DISP').count,
         'totalAutores': Autor.objects.count(),
         'statusEvento': Status.objects.filter(modelo='Evento').order_by('-atualizado').first(),
         'statusArtigo': Status.objects.filter(modelo='Artigo').order_by('-atualizado').first(),
@@ -180,6 +180,8 @@ def deletarEvento(request, eventoId):
 
     return redirect('ESource:eventos')
 
+# CRUD DE AUTOR
+# Cadastrar Autor
 @login_required
 def cadastrarAutor(request):
     if request.method == "POST":
@@ -191,9 +193,38 @@ def cadastrarAutor(request):
             citacao=citacao
         )
 
-        return redirect('ESource:home')
+        messages.success(request, f'Autor {nome} Cadastrado com Sucesso!')
+        
+        return redirect('ESource:autores')
 
     return render(request, 'cadastrarAutor.html')
+
+# Atualizar Autor
+@login_required
+def atualizarAutor(request, autorId):
+    autor = get_object_or_404(Autor, id=autorId)
+
+    if request.method == "POST":
+        autor.nome = request.POST.get('nome')
+        autor.citacao = request.POST.get('citacao')
+
+        autor.save()
+
+        messages.success(request, f'Autor {autor.nome} Atualizado com Sucesso!')
+
+        return redirect('ESource:autores')
+
+    return render(request, 'cadastrarAutor.html', {'autor': autor})
+
+# Deletar Autor
+@login_required
+def deletarAutor(request, autorId):
+    autor = get_object_or_404(Autor, id=autorId)
+    autor.delete()
+
+    messages.success(request, f'Autor {autor.nome} Deletado com Sucesso!')
+
+    return redirect('ESource:autores')
 
 # Login and Logout views
 def entrar(request):
@@ -211,7 +242,7 @@ def entrar(request):
             login(request, user)
             return  redirect('ESource:home')
         else:
-            messages.error(request, 'Usuario não existe!')
+            messages.error(request, 'Conta não existe!')
 
     return render(request, 'conta/entrar.html')
 

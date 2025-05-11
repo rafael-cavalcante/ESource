@@ -23,6 +23,17 @@
 
         {% include 'fragments/cards.html' %}
 
+        <div class="container">
+            {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
+            </div>
+            {% endfor %}
+            {% endif %}
+        </div>
+
         <div class="card text-center mt-5">
             <div class="card-header">
                 <ul class="nav nav-tabs card-header-tabs">
@@ -56,7 +67,7 @@
                                 {% if request.user.is_authenticated %}
                                 <div class="btn-group" role="group">
                                     <a class="btn btn-sm btn-outline-warning"
-                                        href="{% url 'ESource:home'%}">Editar</a>
+                                        href="{% url 'ESource:atualizarAutor' autor.id %}">Editar</a>
                                     <a class="btn btn-sm btn-outline-danger" data-bs-toggle="modal"
                                         data-bs-target="#confirmDeleteModal" data-item-id="{{ autor.id }}"
                                         data-item-url="deletarAutor" data-item-name="{{ autor.nome }}">Excluir</a>

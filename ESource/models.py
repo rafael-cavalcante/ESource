@@ -1,7 +1,6 @@
 from django.db import models
 
 # Create your models here.
-
 class Evento(models.Model):
     class Status(models.TextChoices):
         DISPONIVEL = 'DISP', 'Disponível'

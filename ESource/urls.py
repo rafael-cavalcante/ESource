@@ -15,6 +15,8 @@ urlpatterns = [
     path('deletarArtigo/<int:artigoId>/', views.deletarArtigo, name='deletarArtigo'),
     path('atualizarArtigo/<int:artigoId>/', views.atualizarArtigo, name='atualizarArtigo'),
     path('cadastrarAutor', views.cadastrarAutor, name='cadastrarAutor'),
+    path('atualizarAutor/<int:autorId>/', views.atualizarAutor, name='atualizarAutor'),
+    path('deletarAutor/<int:autorId>/', views.deletarAutor, name='deletarAutor'),
     path('entrar', views.entrar, name='entrar'),
     path('sair', views.sair, name='sair')
 ]

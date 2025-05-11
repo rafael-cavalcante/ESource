@@ -48,23 +48,25 @@
                 </li>
                 {% endif %}
             </ul>
+            <div class="ms-auto d-flex align-items-center">
+                {% if request.user.is_authenticated %}
+                <div class="dropdown">
+                    <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="{% static 'img/user.png' %}" alt="mdo" width="32" height="32" class="rounded-circle">
+                        <strong>{{ user.get_full_name|default:user.username}}</strong>
+                    </a>
+                    <ul class="dropdown-menu text-small shadow dropdown-menu-end">
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item" href="{% url 'ESource:sair' %}">Sair</a></li>
+                    </ul>
+                </div>
+                {% elif not request.user.is_authenticated and 'entrar' not in request.path %}
+                <a class="nav-item nav-link" href="{% url 'ESource:entrar' %}">Entrar</a>
+                {% endif %}
+            </div>
         </div>
-        {% if request.user.is_authenticated %}
-        <div class="dropdown">
-            <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle"
-                data-bs-toggle="dropdown" aria-expanded="false">
-                <img src="{% static 'img/user.png' %}" alt="mdo" width="32" height="32" class="rounded-circle">
-                <strong>{{ user.get_full_name|default:user.username}}</strong>
-            </a>
-            <ul class="dropdown-menu text-small shadow">
-                <li>
-                    <hr class="dropdown-divider">
-                </li>
-                <li><a class="dropdown-item" href="{% url 'ESource:sair' %}">Sair</a></li>
-            </ul>
-        </div>
-        {% elif not request.user.is_authenticated and 'entrar' not in request.path %}
-        <a class="nav-item nav-link" href="{% url 'ESource:entrar' %}">Entrar</a>
-        {% endif %}
     </div>
 </nav>

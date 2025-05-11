@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 import os.path
 from pathlib import Path
+from django.contrib.messages import constants as messages
 
 from django.conf.global_settings import STATICFILES_DIRS, LOGOUT_REDIRECT_URL, LOGIN_REDIRECT_URL
 
@@ -126,5 +127,15 @@ STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# Definindo rotas de login e logout
 LOGIN_REDIRECT_URL = 'entrar'
 LOGOUT_REDIRECT_URL = 'sair'
+
+# Aplicando estilos Bootstrap mensagens 
+MESSAGE_TAGS = {
+    messages.DEBUG: 'secondary',
+    messages.INFO: 'info',
+    messages.SUCCESS: 'success',
+    messages.WARNING: 'warning',
+    messages.ERROR: 'danger',
+}
