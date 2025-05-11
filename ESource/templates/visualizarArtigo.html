@@ -37,10 +37,13 @@
             </div>
             <div class="card-body">
                 <p>
-                    <span class="label-bold">Autores:</span> {% for autor in
-                    artigo.autores.all %} {{ autor.nome }}
-                    <small class="text-muted">({{ autor.citacao }})</small>{% if not
-                    forloop.last %}, {% endif %} {% endfor %}
+                    <span class="label-bold">Autores:</span>
+                    {% for autor in artigo.autores.all %}
+                    {{ autor.nome }}
+                    <small class="text-muted">({{ autor.citacao }})</small>
+                    {% if not forloop.last %},
+                    {% endif %}
+                    {% endfor %}
                 </p>
 
                 <p>

@@ -31,7 +31,6 @@ def eventos(request):
 
     return render(request, 'eventos.html', context)
 
-@login_required
 def autores(request):
     autores = Autor.objects.all()
     context = get_context_data({'autores': autores})
@@ -118,9 +117,32 @@ def atualizarArtigo(request, artigoId):
 
     return render(request, 'cadastrarArtigo.html', context)
 
+@login_required
 def deletarArtigo(request, artigoId):
     artigo = get_object_or_404(Artigo, id=artigoId)
     artigo.delete()
+    
+    messages.success(request, f'Artigo {artigo.titulo} Deletado com Sucesso!')
+
+    return redirect('ESource:home')
+
+@login_required
+def arquivarArtigo(request, artigoId):
+    artigo = get_object_or_404(Artigo, id=artigoId)
+    artigo.status = 'ARQ'
+    artigo.save()
+
+    messages.success(request, f'Artigo {artigo.titulo} Arquivado com Sucesso!')
+
+    return redirect('ESource:home')
+
+@login_required
+def desarquivarArtigo(request, artigoId):
+    artigo = get_object_or_404(Artigo, id=artigoId)
+    artigo.status = 'DISP'
+    artigo.save()
+
+    messages.success(request, f'Artigo {artigo.titulo} Desarquivado com Sucesso!')
 
     return redirect('ESource:home')
 

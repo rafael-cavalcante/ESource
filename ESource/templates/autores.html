@@ -50,12 +50,15 @@
             </div>
             <div class="card-body">
                 <h5 class="card-title">Lista de Autores</h5>
+                {% with show_options=request.user.is_authenticated %}
                 <table id="example" class="table table-striped" style="width:100%">
                     <thead>
                         <tr>
                             <th>Nome</th>
                             <th>Citação</th>
+                            {% if show_options %}
                             <th>Opções</th>
+                            {% endif %}
                         </tr>
                     </thead>
                     <tbody>
@@ -63,8 +66,8 @@
                         <tr>
                             <td>{{ autor.nome }}</td>
                             <td>{{ autor.citacao }}</td>
+                            {% if show_options %}
                             <td>
-                                {% if request.user.is_authenticated %}
                                 <div class="btn-group" role="group">
                                     <a class="btn btn-sm btn-outline-warning"
                                         href="{% url 'ESource:atualizarAutor' autor.id %}">Editar</a>
@@ -72,8 +75,8 @@
                                         data-bs-target="#confirmDeleteModal" data-item-id="{{ autor.id }}"
                                         data-item-url="deletarAutor" data-item-name="{{ autor.nome }}">Excluir</a>
                                 </div>
-                                {% endif %}
                             </td>
+                            {% endif %}
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -81,10 +84,13 @@
                         <tr>
                             <th>Nome</th>
                             <th>Citação</th>
+                            {% if show_options %}
                             <th>Opções</th>
+                            {% endif %}
                         </tr>
                     </tfoot>
                 </table>
+                {% endwith %}
             </div>
         </div>
     </div>

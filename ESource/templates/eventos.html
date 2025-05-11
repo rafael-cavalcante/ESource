@@ -33,11 +33,9 @@
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="true">Eventos</a>
                     </li>
-                    {% if request.user.is_authenticated %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'ESource:autores' %}">Autores</a>
                     </li>
-                    {% endif %}
                 </ul>
             </div>
             <div class="card-body">
