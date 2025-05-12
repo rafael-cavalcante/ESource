@@ -1,7 +1,7 @@
 from django.urls import path
-from ESource.views import entrar, sair
+from ESource.views import views_usuario
 
 urlpatterns = [
-    path('entrar', entrar, name='entrar'),
-    path('sair', sair, name='sair'),
+    path('entrar', views_usuario.entrar, name='entrar'),
+    path('sair', views_usuario.sair, name='sair'),
 ]

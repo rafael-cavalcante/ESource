@@ -1,9 +1,9 @@
 from django.urls import path
-from ESource.views import autores, criar_autor, editar_autor, excluir_autor
+from ESource.views import views_autor
 
 urlpatterns = [
-    path('autores', autores, name='autores'),
-    path('criar_autor',criar_autor, name='criar_autor'), 
-    path('editar_autor/<int:autor_id>/',editar_autor, name='editar_autor'),
-    path('excluir_autor/<int:autor_id>/', excluir_autor, name='excluir_autor'),
+    path('autores', views_autor.autores, name='autores'),
+    path('criar_autor', views_autor.criar_autor, name='criar_autor'), 
+    path('editar_autor/<int:autor_id>/', views_autor.editar_autor, name='editar_autor'),
+    path('excluir_autor/<int:autor_id>/', views_autor.excluir_autor, name='excluir_autor'),
 ]

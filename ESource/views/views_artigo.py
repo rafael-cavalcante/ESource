@@ -23,7 +23,7 @@ def exibir_artigo(request, artigo_id):
 def criar_artigo(request):
     if request.method == "POST":
         titulo = request.POST.get('titulo')
-        autor = request.POST.get('autor')
+        autores_ids = request.POST.getlist('autores')
         subAreas = request.POST.get('subAreas')
         data = request.POST.get('dataPublicacao')
         link = request.POST.get('link')
@@ -40,13 +40,15 @@ def criar_artigo(request):
 
         artigo = Artigo.objects.create(
             titulo=titulo,
-            autor=autor,
             subAreas=subAreas,
             dataPublicacao=data_publicacao,
             link=link,
             conteudo=conteudo,
             evento=evento
         )
+        
+        # Associa os autores
+        artigo.autores.set(autores_ids)
         
         messages.success(request, f'Artigo {artigo.titulo} Criado com Sucesso!')
 
@@ -92,7 +94,7 @@ def editar_artigo(request, artigo_id):
 
         return redirect('ESource:artigos')
 
-    eventos = Evento.objects.filter(status='DISP')
+    eventos = Evento.objects.all()
     autores = Autor.objects.all()
     
     context = {'artigo' : artigo, 'eventos' : eventos, 'autores' : autores}
