@@ -7,3 +7,4 @@ class ESourceConfig(AppConfig):
     
     def ready(self):
         import ESource.signals
+        import ESource.dash_apps
