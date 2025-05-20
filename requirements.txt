@@ -1,4 +1,6 @@
-asgiref==3.8.1
+dash==2.18.2
+dash_bootstrap_components==2.0.2
 Django==5.2.1
-sqlparse==0.5.3
-tzdata==2025.2
+django_plotly_dash==2.4.6
+pandas==2.2.3
+plotly==6.1.0

@@ -16,10 +16,14 @@ def criar_autor(request):
     if request.method == "POST":
         nome = request.POST.get('nome')
         citacao = request.POST.get('citacao')
+        instituicao = request.POST.get('instituicao')
+        unidade_federativa = request.POST.get('unidade_federativa')
 
         Autor.objects.create(
             nome=nome,
-            citacao=citacao
+            citacao=citacao,
+            instituicao=instituicao,
+            unidade_federativa=unidade_federativa
         )
 
         messages.success(request, f'Autor {nome} Cadastrado com Sucesso!')
@@ -35,6 +39,8 @@ def editar_autor(request, autor_id):
     if request.method == "POST":
         autor.nome = request.POST.get('nome')
         autor.citacao = request.POST.get('citacao')
+        autor.instituicao = request.POST.get('instituicao')
+        autor.unidade_federativa = request.POST.get('unidade_federativa')
 
         autor.save()
 

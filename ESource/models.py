@@ -45,6 +45,8 @@ class Artigo(models.Model):
 class Autor(models.Model):
     nome = models.CharField(max_length=150, blank=True, null=True)
     citacao = models.CharField(max_length=150, blank=True, null=True)
+    instituicao = models.CharField(max_length=10, blank=True, null=True)
+    unidade_federativa = models.CharField(max_length=10, blank=True, null=True)
 
     class Meta:
         verbose_name = "Autores"

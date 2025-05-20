@@ -13,13 +13,16 @@ from django.conf import settings
 app = DjangoDash('Dashboard', external_stylesheets=[dbc.themes.BOOTSTRAP], external_scripts=["https://cdn.plot.ly/plotly-3.0.1.min.js"])  # nome único
 
 # Caminho absoluto para o CSV
-csv_path = os.path.join(settings.BASE_DIR, 'ESource', 'source', 'Dados extraidos dos artigos.csv')
+csv_path = os.path.join(settings.BASE_DIR, 'ESource', 'source', 'dados_fontes.csv')
+
+#if os.path.exists(csv_path):
 
 # Lendo os dados para um DataFrame
 df = pd.read_csv(csv_path, sep=';', encoding='utf-8')
 
 # Criado cabeçalho do dataframe
-df.columns = ["ID", "Título", "Ano", "Autores", "Instituições", "Estados", "Área", "Links"]
+#df.columns = ["ID", "Título", "Ano", "Autores", "Instituições", "Estados", "Área", "Links"]
+df.columns = ["Título", "Ano", "Autores", "Instituições", "Estados", "Área", "Links"]
 
 # Dividir autores em lista
 df['Autores'] = df['Autores'].str.split(',')
@@ -104,7 +107,7 @@ app.layout = html.Div([
             dcc.Checklist(
                 id='state-checklist',
                 options=[{'label': f"{state} ({count})", 'value': state}
-                         for state, count in zip(state_counts['Estado'], state_counts['Quantidade de Autores'])],
+                        for state, count in zip(state_counts['Estado'], state_counts['Quantidade de Autores'])],
                 value=state_counts['Estado'].head(5).tolist(),
                 labelStyle={'display': 'block'},
             )
@@ -115,7 +118,7 @@ app.layout = html.Div([
     ]),
 
     dbc.Row([dbc.Col([html.H1("Distribuição de Artigos por Autores e Estados",
-                              className="text-center mt-3 mb-4")])]),
+                            className="text-center mt-3 mb-4")])]),
 
     dbc.Row([
         dbc.Col([

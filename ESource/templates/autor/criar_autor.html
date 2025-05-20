@@ -34,6 +34,18 @@
                                 placeholder="Ex: Santos, R. C." value="{{ autor.citacao|default:'' }}" required>
                         </div>
 
+                        <div class="mb-3">
+                            <label for="instituicao" class="form-label">Instituição</label>
+                            <input type="text" class="form-control" id="instituicao" name="instituicao"
+                                placeholder="Ex: UFERSA, UFPB" value="{{ autor.instituicao|default:'' }}" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="unidade_federativa" class="form-label">Unicade Federativa</label>
+                            <input type="text" class="form-control" id="unidade_federativa" name="unidade_federativa"
+                                placeholder="Ex: RN, PR" value="{{ autor.unidade_federativa|default:'' }}" required>
+                        </div>
+
                         <button type="submit" class="btn btn-outline-primary">Cadastrar Autor</button>
                     </form>
                 </div>
