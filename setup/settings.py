@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'django_plotly_dash.apps.DjangoPlotlyDashConfig',
     'channels',
     'ESource.apps.ESourceConfig',
+    'ChatIA.apps.ChatiaConfig',
 ]
 
 MIDDLEWARE = [

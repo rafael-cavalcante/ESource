@@ -6,9 +6,12 @@ from django.conf import settings
 from django.http import HttpResponse
 from ESource.models import Artigo 
 
+from django.contrib.auth.decorators import login_required
+
 def exibir_dashboard(request):
     return render(request, 'dashboard.html')
 
+@login_required
 def gerar_csv_artigos(request):
     # Cria diretório "source" se não existir
     output_dir = os.path.join(settings.BASE_DIR, 'ESource','source')
@@ -29,12 +32,12 @@ def gerar_csv_artigos(request):
             'link'
         ])
 
-        for artigo in Artigo.objects.all():
+        for artigo in Artigo.objects.filter(status='DISP'):
             autores = artigo.autores.all()
 
-            nomes = ', '.join(autor.nome or '' for autor in autores)
-            instituicoes = ', '.join(autor.instituicao or '' for autor in autores)
-            ufs = ', '.join(autor.unidade_federativa or '' for autor in autores)
+            nomes = ','.join(autor.nome or '' for autor in autores)
+            instituicoes = ','.join(autor.instituicao or '' for autor in autores)
+            ufs = ','.join(autor.unidade_federativa or '' for autor in autores)
 
             ano = artigo.dataPublicacao.year if artigo.dataPublicacao else ''
 

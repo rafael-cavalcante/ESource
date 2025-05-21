@@ -12,6 +12,45 @@ from django.conf import settings
 
 app = DjangoDash('Dashboard', external_stylesheets=[dbc.themes.BOOTSTRAP], external_scripts=["https://cdn.plot.ly/plotly-3.0.1.min.js"])  # nome único
 
+def carregar_dados_csv():
+    csv_path = os.path.join(settings.BASE_DIR, 'ESource', 'source', 'dados_fontes.csv')
+    
+    if not os.path.exists(csv_path):
+        return pd.DataFrame()
+
+    df = pd.read_csv(csv_path, sep=';', encoding='utf-8')
+    df.columns = ["Título", "Ano", "Autores", "Instituições", "Estados", "Área", "Links"]
+    
+    df['Autores'] = df['Autores'].str.split(',')
+    df['Instituições'] = df['Instituições'].str.rstrip(',').str.split(',')
+    df['Estados'] = df['Estados'].str.rstrip(',').str.split(',')
+    df['Número de Autores'] = df['Autores'].apply(len)
+    
+    # Pré-processamento: extrair e contar autores por instituição
+    # Primeiro, vamos expandir as listas de instituições e autores
+    df_expanded = df.explode('Instituições')
+
+    # Contar autores por instituição
+    inst_counts = df_expanded['Instituições'].value_counts().reset_index()
+    inst_counts.columns = ['Instituição', 'Quantidade de Autores']
+
+    # Pré-processamento: contar artigos por área
+    area_counts = df['Área'].value_counts().reset_index()
+    area_counts.columns = ['Área', 'Quantidade de Artigos']
+
+    # Pré-processamento: extrair e contar autores por estado
+    df_expanded = df.explode('Estados')
+    state_counts = df_expanded['Estados'].value_counts().reset_index()
+    state_counts.columns = ['Estado', 'Quantidade de Autores']
+
+    # Ordenar os estados por quantidade de autores
+    state_counts = state_counts.sort_values('Quantidade de Autores', ascending=False)
+
+    # Pré-processamento dos dados
+    df_expanded = df.explode('Autores').explode('Estados')
+    
+    return df
+
 # Caminho absoluto para o CSV
 csv_path = os.path.join(settings.BASE_DIR, 'ESource', 'source', 'dados_fontes.csv')
 
@@ -147,6 +186,10 @@ app.layout = html.Div([
     Input('year-slider', 'value')
 )
 def update_articles_by_year(selected_years):
+    df = carregar_dados_csv()
+    if df.empty:
+        return px.line(title="Nenhum dado disponível")
+    
     filtered_df = df[(df['Ano'] >= selected_years[0]) & (df['Ano'] <= selected_years[1])]
     counts = filtered_df['Ano'].value_counts().sort_index().reset_index()
     counts.columns = ['Ano', 'Quantidade']
@@ -158,6 +201,10 @@ def update_articles_by_year(selected_years):
     Input('institution-dropdown', 'value')
 )
 def update_authors_by_institution(selected_institutions):
+    df = carregar_dados_csv()
+    if df.empty:
+        return px.line(title="Nenhum dado disponível")
+    
     filtered = inst_counts[inst_counts['Instituição'].isin(selected_institutions)]
     fig = px.bar(filtered, x='Instituição', y='Quantidade de Autores')
     return fig
@@ -167,6 +214,10 @@ def update_authors_by_institution(selected_institutions):
     Input('area-dropdown', 'value')
 )
 def update_articles_by_area(selected_areas):
+    df = carregar_dados_csv()
+    if df.empty:
+        return px.line(title="Nenhum dado disponível")
+    
     filtered = area_counts[area_counts['Área'].isin(selected_areas)]
     filtered = filtered.sort_values('Quantidade de Artigos', ascending=True)
     fig = px.bar(filtered, y='Área', x='Quantidade de Artigos', orientation='h')
@@ -177,6 +228,10 @@ def update_articles_by_area(selected_areas):
     Input('state-checklist', 'value')
 )
 def update_authors_by_state(selected_states):
+    df = carregar_dados_csv()
+    if df.empty:
+        return px.line(title="Nenhum dado disponível")
+    
     filtered = state_counts[state_counts['Estado'].isin(selected_states)]
     fig = px.area(filtered, x='Estado', y='Quantidade de Autores')
     return fig
@@ -186,6 +241,10 @@ def update_authors_by_state(selected_states):
     Input('year-slider2', 'value')
 )
 def update_icicle_chart(year_range):
+    df = carregar_dados_csv()
+    if df.empty:
+        return px.line(title="Nenhum dado disponível")
+    
     filtered = df_expanded[(df_expanded['Ano'] >= year_range[0]) & (df_expanded['Ano'] <= year_range[1])]
     grouped = filtered.groupby(['Estados', 'Autores']).size().reset_index(name='Quantidade')
     fig = px.icicle(grouped, path=['Estados', 'Autores'], values='Quantidade')
