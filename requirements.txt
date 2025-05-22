@@ -1,6 +1,12 @@
 dash==2.18.2
 dash_bootstrap_components==2.0.2
-Django==5.2.1
+Django==4.0.1
 django_plotly_dash==2.4.6
+langchain_community==0.3.24
+langchain_core==0.3.61
+langchain_google_genai==2.1.4
 pandas==2.2.3
-plotly==6.1.0
+plotly==6.0.1
+protobuf==6.31.0
+python-dotenv==1.1.0
+psycopg2==2.9.10
