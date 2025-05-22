@@ -1,7 +1,7 @@
-dash==3.0.3
-dash_bootstrap_components==2.0.2
+dash==2.18.2
+dash-bootstrap-components==1.7.1
 Django==4.0.1
-django_plotly_dash==2.4.6
+django-plotly-dash==2.4.6
 langchain_community==0.3.24
 langchain_core==0.3.61
 langchain_google_genai==2.1.4
