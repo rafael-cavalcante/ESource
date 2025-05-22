@@ -1,12 +1,13 @@
 import csv
 import os
-from django.shortcuts import render
-from datetime import datetime
+
+from django.contrib import messages
+from django.shortcuts import render, redirect
 from django.conf import settings
-from django.http import HttpResponse
-from ESource.models import Artigo 
 
 from django.contrib.auth.decorators import login_required
+
+from ESource.models import Artigo
 
 def exibir_dashboard(request):
     return render(request, 'dashboard.html')
@@ -50,5 +51,7 @@ def gerar_csv_artigos(request):
                 artigo.subAreas or '',
                 artigo.link or ''
             ])
+            
+    messages.success(request, f'Base de dados Dashboard Atualiza com Sucesso!')
 
-    return HttpResponse(f'Arquivo CSV gerado com sucesso em: <code>{filepath}</code>')
+    return redirect('ESource:artigos')

@@ -16,7 +16,7 @@
                     <a class="nav-link" aria-current="page" href="{% url 'ESource:dashboard' %}">Dashboard</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="">Chat IA</a>
+                    <a class="nav-link" aria-current="page" href="{% url 'ChatIA:chatia' %}">Chat IA</a>
                 </li>
                 {% if user.is_authenticated %}
                 <li class="nav-item dropdown">
@@ -62,6 +62,15 @@
                     </a>
                     <ul class="dropdown-menu text-small shadow dropdown-menu-end">
                         <li><a class="dropdown-item" href="#">Logs Status</a></li>
+                        <li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item" href="{% url 'ChatIA:atualizar_csv_chatIA' %}">Atualizar Dados
+                                ChatIA</a></li>
+                        <li>
+                        <li><a class="dropdown-item" href="{% url 'ESource:gerar_csv_artigos' %}">Atualizar Dados
+                                Dashboard</a></li>
                         <li>
                             <hr class="dropdown-divider">
                         </li>

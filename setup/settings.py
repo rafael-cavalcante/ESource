@@ -15,6 +15,12 @@ from django.contrib.messages import constants as messages
 
 from django.conf.global_settings import STATICFILES_DIRS, LOGOUT_REDIRECT_URL, LOGIN_REDIRECT_URL
 
+from dotenv import load_dotenv
+
+load_dotenv()
+
+GEMINI_API_KEY = str(os.getenv('GEMINI_API_KEY'))
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 

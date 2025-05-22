@@ -22,8 +22,8 @@ def carregar_dados_csv():
     df.columns = ["Título", "Ano", "Autores", "Instituições", "Estados", "Área", "Links"]
     
     df['Autores'] = df['Autores'].str.split(',')
-    df['Instituições'] = df['Instituições'].str.rstrip(',').str.split(',')
-    df['Estados'] = df['Estados'].str.rstrip(',').str.split(',')
+    df['Instituições'] = df['Instituições'].fillna('').str.rstrip(',').str.split(',')
+    df['Estados'] = df['Estados'].fillna('').str.rstrip(',').str.split(',')
     df['Número de Autores'] = df['Autores'].apply(len)
     
     # Pré-processamento: extrair e contar autores por instituição
@@ -67,10 +67,10 @@ df.columns = ["Título", "Ano", "Autores", "Instituições", "Estados", "Área",
 df['Autores'] = df['Autores'].str.split(',')
 
 # Dividir instituições em lista
-df['Instituições'] = df['Instituições'].str.rstrip(',').str.split(',')
+df['Instituições'] = df['Instituições'].fillna('').str.rstrip(',').str.split(',')
 
 # Dividir estados em lista
-df['Estados'] = df['Estados'].str.rstrip(',').str.split(',')
+df['Estados'] = df['Estados'].fillna('').str.rstrip(',').str.split(',')
 
 # Contar número de autores
 df['Número de Autores'] = df['Autores'].apply(len)
