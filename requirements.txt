@@ -1,4 +1,4 @@
-dash==2.18.2
+dash==3.0.3
 dash_bootstrap_components==2.0.2
 Django==4.0.1
 django_plotly_dash==2.4.6
