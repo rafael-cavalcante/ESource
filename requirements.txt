@@ -20,6 +20,7 @@ dash-table==5.0.0
 dataclasses-json==0.6.7
 Django==5.2.1
 django-plotly-dash==2.4.6
+dj-database-url>=1.0
 dpd_components==0.1.0
 faiss-cpu==1.11.0
 filetype==1.2.0

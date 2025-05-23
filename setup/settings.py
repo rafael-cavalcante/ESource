@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 import os
+import dj_database_url
 from pathlib import Path
 from django.contrib.messages import constants as messages
 
@@ -88,14 +89,9 @@ WSGI_APPLICATION = 'setup.wsgi.application'
 # Database
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('NAME_DB'),
-        'USER': os.getenv('USER_DB'),
-        'PASSWORD': os.getenv('PASSWORD_DB'),
-        'HOST': os.getenv('HOST_DB'),
-        'PORT': os.getenv('PORT_DB'),
-    }
+    'default': dj_database_url.config(
+        default=os.getenv('HOST_DB'), conn_max_age=600, ssl_require=True
+    )
 }
 
 # Password validation
